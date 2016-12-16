@@ -1,16 +1,20 @@
-const RichEmbed = require('discord.js').RichEmbed;
+const Discord = require('discord.js');
+const RichEmbed = Discord.RichEmbed;
+const Collection = Discord.Collection;
 
 module.exports = (client, message, args) => new Promise(async (resolve, reject) => {
   const list = Number(args.shift());
-  const entry = Number(args.shift());
-  if (isNaN(list) || isNaN(entry)) {
+  if (isNaN(list)) {
     return reject(
 `!add <list#> <title> <text>
 Use \`"\` for the title and text if you want multiple words.`
     );
   }
 
-  const checklist = client.checklists.get(message.channel.id).find('id', list);
+  if (!client.checklists.has(message.channel.id)) {
+    client.checklists.set(message.channel.id, new Collection());
+  }
+  const checklist = client.checklists.get(message.channel.id).find('listID', list);
   if (!checklist) { return reject('Create a checklist using `!create` first'); }
 
   let msg;
@@ -20,11 +24,13 @@ Use \`"\` for the title and text if you want multiple words.`
     delete client.checklists.delete(checklist.channel.id);
     return message.delete().then(resolve, reject);
   }
+
   const embed = new RichEmbed(checklist.embed);
   embed
     .addField(`**${
       checklist.embed.fields ? checklist.embed.fields.length + 1 : 1
     }** ${client.EMOJIS.INCOMPLETE} ${args[0]}`, args[1]);
+
   return msg.edit('', { embed })
     .then(() => message.delete())
     .then(resolve, reject);

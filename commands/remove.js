@@ -1,18 +1,24 @@
+const Discord = require('discord.js');
+const Collection = Discord.Collection;
+
 module.exports = (client, message, args) => new Promise(async (resolve, reject) => {
   const list = Number(args.shift());
   const entry = Number(args.shift());
   if (isNaN(list) || isNaN(entry)) {
-    return reject('!remove <list#> <title> <text>');
+    return reject('!remove <list#> <entry#>');
   }
 
-  const checklist = client.checklists.get(message.channel.id).find('id', list);
+  if (!client.checklists.has(message.channel.id)) {
+    client.checklists.set(message.channel.id, new Collection());
+  }
+  const checklist = client.checklists.get(message.channel.id).find('listID', list);
   if (!checklist) { return reject('Create a checklist using `!create` first'); }
 
   let msg;
   try {
     msg = await message.channel.fetchMessage(checklist.message.id);
   } catch (err) {
-    delete client.checklists[checklist.message.id];
+    delete client.checklists.delete(checklist.channel.id);
     return message.delete().then(resolve, reject);
   }
   const embed = checklist.embed;

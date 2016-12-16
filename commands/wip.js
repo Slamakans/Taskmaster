@@ -1,9 +1,15 @@
+const Discord = require('discord.js');
+const Collection = Discord.Collection;
+
 module.exports = (client, message, args) => new Promise(async (resolve, reject) => {
   const list = Number(args.shift());
   const entry = Number(args.shift());
   if (isNaN(list) || isNaN(entry)) { return reject('!wip <list#> <entry#>'); }
 
-  const checklist = client.checklists.get(message.channel.id).find('id', list);
+  if (!client.checklists.has(message.channel.id)) {
+    client.checklists.set(message.channel.id, new Collection());
+  }
+  const checklist = client.checklists.get(message.channel.id).find('listID', list);
   if (!checklist) { return reject('Create a checklist using `!create` first'); }
 
   let msg;
@@ -25,11 +31,12 @@ module.exports = (client, message, args) => new Promise(async (resolve, reject) 
     new RegExp(`${client.EMOJIS.INCOMPLETE}|${client.EMOJIS.COMPLETE}`),
     client.EMOJIS.WIP
   )
-  .replace(userMentionRegex, '');
+  /* Removes previous (Completed/WIP by X) */
+  .replace(/ \(_(Completed|WIP) by.+\)$/, '');
 
-  /* Replaces the old title with the new title */
+  /* Changes format of the title to the WIP format */
   field.name = field.name.replace(
-    /\*\*\d+?\*\* :.+?: (.|[\r\n])*?/,
+    /\*\*\d+?\*\* :.+?: (.|[\r\n])*/,
     `${'$0'}${args.length > 2 ? args.join(' ') : args.shift()}`
   );
 
