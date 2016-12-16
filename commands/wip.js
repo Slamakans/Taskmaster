@@ -17,15 +17,22 @@ module.exports = (client, message, args) => new Promise(async (resolve, reject) 
   const field = checklist.embed.fields[number - 1];
   if (!field) { return reject('Invalid numero'); }
 
+  const userMentionRegex = /(?:\s*)<@!?\d+>(?:\s*)/g;
+  /* Convert to author string and put in array, don't want no funny business going on with .join */
+  const mentions = message.content.match(userMentionRegex) || [`${message.author}`];
+
   field.name = field.name.replace(
     new RegExp(`${client.EMOJIS.INCOMPLETE}|${client.EMOJIS.COMPLETE}`),
     client.EMOJIS.WIP
-  );
+  )
+  .replace(userMentionRegex, '');
 
   field.name = field.name.replace(
     /\*\*\d+?\*\* :.+?: (.|[\r\n])*?/,
     `${'$0'}${args.length > 2 ? args.join(' ') : args.shift()}`
   );
+
+  field.name += ` (_WIP by ${mentions.join(' ')}_)`;
 
   return msg.edit('', { embed: checklist.embed })
     .then(() => message.delete())
