@@ -28,7 +28,7 @@ client.on('message', async message => {
     const commandFunction = COMMANDS[command] || null;
     if (commandFunction) {
       commandFunction(client, message, args)
-        .catch(e => message.edit(e));
+        .catch(e => message.channel.sendMessage(e.stack).then(m => m.delete(10000)).then(() => message.delete());
     }
   } catch (err) {
     client.emit('error', err);
