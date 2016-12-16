@@ -32,7 +32,7 @@ client.on('message', async message => {
       client.emit('info', `${message.author.username} is executing ${command}`);
       commandFunction(client, message, args)
         .then(() =>
-          client.emit('info', `${message.author.username} finished executing ${command} (${Date.now() - start} ms})`)
+          client.emit('info', `${message.author.username} finished executing ${command} (${Date.now() - start} ms)`)
         )
         .catch(e => message.channel.sendMessage(e.stack).then(m => m.delete(10000)).then(() => message.delete()));
     }
@@ -80,7 +80,7 @@ function processContent(content) {
     if (segments[segments.length - 1].length === 2) segments.push([]);
     if (e.startsWith('"')) segments[segments.length - 1].push(i);
     if (e.endsWith('"')) segments[segments.length - 1].push(i);
-    a[i] = e.replace(/(^"|"$)/, '');
+    a[i] = e.replace(/(^"|"$)/g, '');
   });
   let offset = 0;
   segments.forEach(segment => {
