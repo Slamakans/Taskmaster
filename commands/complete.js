@@ -20,7 +20,7 @@ module.exports = (client, message, args) => new Promise(async (resolve, reject) 
   field.name = field.name.replace(
     new RegExp(`${client.EMOJIS.INCOMPLETE}|${client.EMOJIS.WIP}`),
     client.EMOJIS.COMPLETE
-  );
+  ).replace(/ \((WIP)(.+?)\)$/, ' (Completed$2)');
 
   field.name = field.name.replace(
     /\*\*\d+?\*\* :.+?: (.|[\r\n])*?/,

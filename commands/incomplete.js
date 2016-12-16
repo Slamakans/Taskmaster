@@ -20,7 +20,7 @@ module.exports = (client, message, args) => new Promise(async (resolve, reject) 
   field.name = field.name.replace(
     new RegExp(`${client.EMOJIS.COMPLETE}|${client.EMOJIS.WIP}`),
     client.EMOJIS.INCOMPLETE
-  );
+  ).replace(/ \(.+?\)$/, '');
 
   return msg.edit('', { embed: checklist.embed })
     .then(() => message.delete())
