@@ -28,10 +28,10 @@ client.on('message', async message => {
     const commandFunction = COMMANDS[command] || null;
     if (commandFunction) {
       const start = Date.now();
-      client.on('info', `${message.author.username} is executing ${command}`);
+      client.emit('info', `${message.author.username} is executing ${command}`);
       commandFunction(client, message, args)
         .then(() =>
-          client.on('info', `${message.author.username} finished executing ${command} (${Date.now() - start} ms})`)
+          client.emit('info', `${message.author.username} finished executing ${command} (${Date.now() - start} ms})`)
         )
         .catch(e => message.channel.sendMessage(e.stack).then(m => m.delete(10000)).then(() => message.delete()));
     }
@@ -48,12 +48,12 @@ client.on('messageDelete', async message => {
 });
 
 client.on('ready', () => {
+  client.EMOJIS = {
+    COMPLETE: '💚',
+    WIP: '💛',
+    INCOMPLETE: '❤',
+  };
   try {
-    client.EMOJIS = {
-      COMPLETE: '💚',
-      WIP: '💛',
-      INCOMPLETE: '❤',
-    };
     const temp = require('./data/checklists.json');
     temp.map(checklists => new Discord.Collection(checklists));
     client.checklists = new Discord.Collection();
