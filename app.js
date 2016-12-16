@@ -27,7 +27,12 @@ client.on('message', async message => {
 
     const commandFunction = COMMANDS[command] || null;
     if (commandFunction) {
+      const start = Date.now();
+      client.on('info', `${message.author.username} is executing ${command}`);
       commandFunction(client, message, args)
+        .then(() =>
+          client.on('info', `${message.author.username} finished executing ${command} (${Date.now() - start} ms})`)
+        )
         .catch(e => message.channel.sendMessage(e.stack).then(m => m.delete(10000)).then(() => message.delete()));
     }
   } catch (err) {
