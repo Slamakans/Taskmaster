@@ -54,12 +54,14 @@ client.on('ready', () => {
       WIP: '💛',
       INCOMPLETE: '❤',
     };
-    client.checklists = require('./data/checklists.json');
+    const temp = require('./data/checklists.json');
+    temp.map(checklists => new Discord.Collection(checklists));
+    client.checklists = new Discord.Collection();
     client.emit('info', 'Checklists loaded');
   } catch (err) {
     client.emit('info', 'checklists.json not found, creating file...');
-    fs.writeFileSync('data/checklists.json', '{}');
-    client.checklists = {};
+    fs.writeFileSync('data/checklists.json', '[]');
+    client.checklists = new Discord.Collection();
   }
   client.emit('info', 'Bot is connected and ready');
 });
@@ -92,7 +94,7 @@ function processContent(content) {
 
 const fs = require('fs');
 const _saveChecklists = () => {
-  fs.writeFileSync('data/checklists.json', JSON.stringify(client.checklists, undefined, 4));
+  fs.writeFileSync('data/checklists.json', JSON.stringify([...client.checklists], undefined, 4));
   client.emit('debug', 'Saved checklists.json');
 };
 setInterval(_saveChecklists, 30000);
