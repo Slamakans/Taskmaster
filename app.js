@@ -97,7 +97,7 @@ function processContent(content) {
 
 const fs = require('fs');
 const _saveChecklists = () => {
-  client.emit('debug', require('util').inspect(client.checklists));
+  // client.emit('debug', require('util').inspect(client.checklists));
   fs.writeFileSync(
     'data/checklists.json',
     JSON.stringify([...client.checklists.map((e, k) => [k, ...e])], undefined, 4)
