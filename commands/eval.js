@@ -21,3 +21,12 @@ module.exports = (client, message) => new Promise(async () => {
 });
 
 const clean = text => typeof text === 'string' ? text.replace(/[`@]/g, v => `${v}${String.fromCharCode(8203)}`) : text;
+
+const save = client => { // eslint-disable-line no-unused-vars
+  // client.emit('debug', require('util').inspect(client.checklists));
+  fs.writeFileSync(
+    'data/checklists.json',
+    JSON.stringify([...client.checklists.map((e, k) => [k, ...e])], undefined, 4)
+  );
+  client.emit('debug', 'Saved checklists.json');
+};

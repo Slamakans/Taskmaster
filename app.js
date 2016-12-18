@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const Collection = Discord.Collection;
 const client = new Discord.Client();
 const PREFIX = '!';
 const COMMANDS = {
@@ -27,7 +28,12 @@ client.on('message', async message => {
 
     const commandFunction = COMMANDS[command] || null;
     if (commandFunction) {
+      const start = Date.now();
+      client.emit('info', `${message.author.username} is executing ${command}`);
       commandFunction(client, message, args)
+        .then(() =>
+          client.emit('info', `${message.author.username} finished executing ${command} (${Date.now() - start} ms)`)
+        )
         .catch(e => message.channel.sendMessage(e.stack).then(m => m.delete(10000)).then(() => message.delete()));
     }
   } catch (err) {
@@ -36,25 +42,29 @@ client.on('message', async message => {
 });
 
 client.on('messageDelete', async message => {
-  if (client.checklists[message.id]) {
-    delete client.checklists[message.id];
+  if (client.checklists.delete(message.id)) {
+    delete client.checklists.delete(message.id);
     client.emit('info', 'A checklist was deleted');
   }
 });
 
 client.on('ready', () => {
+  client.EMOJIS = {
+    COMPLETE: '💚',
+    WIP: '💛',
+    INCOMPLETE: '❤',
+  };
   try {
-    client.EMOJIS = {
-      COMPLETE: '💚',
-      WIP: '💛',
-      INCOMPLETE: '❤',
-    };
-    client.checklists = require('./data/checklists.json');
+    client.checklists = new Collection(
+      require('./data/checklists.json')
+        .map(channel => [channel[0], new Collection([channel[1]])])
+    );
     client.emit('info', 'Checklists loaded');
   } catch (err) {
-    client.emit('info', 'checklists.json not found, creating file...');
-    fs.writeFileSync('data/checklists.json', '{}');
-    client.checklists = {};
+    client.emit('error', err);
+    client.emit('info', 'data/checklists.json not found, creating file...');
+    fs.writeFileSync('data/checklists.json', '[]');
+    client.checklists = new Collection();
   }
   client.emit('info', 'Bot is connected and ready');
 });
@@ -70,7 +80,7 @@ function processContent(content) {
     if (segments[segments.length - 1].length === 2) segments.push([]);
     if (e.startsWith('"')) segments[segments.length - 1].push(i);
     if (e.endsWith('"')) segments[segments.length - 1].push(i);
-    a[i] = e.replace(/(^"|"$)/, '');
+    a[i] = e.replace(/(^"|"$)/g, '');
   });
   let offset = 0;
   segments.forEach(segment => {
@@ -87,12 +97,17 @@ function processContent(content) {
 
 const fs = require('fs');
 const _saveChecklists = () => {
-  fs.writeFileSync('data/checklists.json', JSON.stringify(client.checklists, undefined, 4));
+  // client.emit('debug', require('util').inspect(client.checklists));
+  fs.writeFileSync(
+    'data/checklists.json',
+    JSON.stringify([...client.checklists.map((e, k) => [k, ...e])], undefined, 4)
+  );
   client.emit('debug', 'Saved checklists.json');
 };
 setInterval(_saveChecklists, 30000);
 
 client.on('info', console.log);
 client.on('debug', console.log);
+client.on('error', console.log);
 
 client.login(require('./auth.json').token);
