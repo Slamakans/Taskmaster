@@ -13,6 +13,7 @@ const COMMANDS = {
   purge: require('./commands/purge.js'),
   clear: require('./commands/clear.js'),
   eval: require('./commands/eval.js'),
+  fetch: require('./commands/fetch.js'),
 };
 
 client.on('message', async message => {
