@@ -109,7 +109,7 @@ setInterval(() => {
   try {
     _saveChecklists();
   } catch (err) {
-    client.emit('error', 'Was unable to save the checklists');
+    client.emit('error', `Was unable to save the checklists\n${err}`);
   }
 }, 30000);
 
