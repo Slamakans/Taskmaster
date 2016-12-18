@@ -21,7 +21,7 @@ Use \`"\` for the title and text if you want multiple words.`
   try {
     msg = await message.channel.fetchMessage(checklist.message.id);
   } catch (err) {
-    delete client.checklists.delete(checklist.channel.id);
+    delete client.checklists.delete(checklist.message.id);
     return message.delete().then(resolve, reject);
   }
 

@@ -16,7 +16,7 @@ module.exports = (client, message, args) => new Promise(async (resolve, reject) 
   try {
     msg = await message.channel.fetchMessage(checklist.message.id);
   } catch (err) {
-    delete client.checklists.delete(checklist.channel.id);
+    delete client.checklists.delete(checklist.message.id);
     return message.delete().then(resolve, reject);
   }
   const field = checklist.embed.fields[entry - 1];

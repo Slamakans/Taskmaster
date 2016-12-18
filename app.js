@@ -97,14 +97,20 @@ function processContent(content) {
 
 const fs = require('fs');
 const _saveChecklists = () => {
-  // client.emit('debug', require('util').inspect(client.checklists));
   fs.writeFileSync(
     'data/checklists.json',
-    JSON.stringify([...client.checklists.map((e, k) => [k, ...e])], undefined, 4)
+    `${JSON.stringify([...client.checklists.map((e, k) => [k, ...e])], undefined, 4)}
+`
   );
   client.emit('debug', 'Saved checklists.json');
 };
-setInterval(_saveChecklists, 30000);
+setInterval(() => {
+  try {
+    _saveChecklists();
+  } catch (err) {
+    client.emit('error', `Was unable to save the checklists\n${err}`);
+  }
+}, 30000);
 
 client.on('info', console.log);
 client.on('debug', console.log);

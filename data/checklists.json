@@ -1,1 +1,69 @@
-[]
+[
+    [
+        "258308617961340929",
+        [
+            "259390191481913345",
+            {
+                "listID": "1",
+                "embed": {
+                    "title": "#1 Setup Enviroment",
+                    "color": 9301742,
+                    "author": null,
+                    "fields": [
+                        {
+                            "name": "**1** 💚 Github (_Completed by  <@114758367905447939>_)",
+                            "value": "Spillerill vilket verktyg, men nån VCS iallafall. Sätta upp repository, dela det med kodaporna. Fylla i basic licence o sånt skit. Skip readme for now.",
+                            "inline": false
+                        },
+                        {
+                            "name": "**2** 💚 Unity (_Completed by <@158398273541898240>_)",
+                            "value": "Sätta upp nytt Unity projekt. Lägg till lite smått o gått scripts i den. Pusha skiten till Github.",
+                            "inline": false
+                        }
+                    ],
+                    "thumbnail": null,
+                    "footer": null
+                },
+                "message": {
+                    "id": "259390191481913345"
+                }
+            }
+        ]
+    ],
+    [
+        "258308409445711884",
+        [
+            "260140763093008384",
+            {
+                "listID": "1",
+                "embed": {
+                    "title": "#1",
+                    "color": 9301742,
+                    "author": null,
+                    "fields": [
+                        {
+                            "name": "**1** ❤ Brainstorm",
+                            "value": "Måste bestämma när vi ska samlas",
+                            "inline": false
+                        },
+                        {
+                            "name": "**2** 💛 First Boss (_WIP by  <@102518686954291200>_)",
+                            "value": "Någon person hahah",
+                            "inline": false
+                        },
+                        {
+                            "name": "**3** ❤ Initial player mechanics",
+                            "value": "För att implementera mot prototyp bossfighten",
+                            "inline": false
+                        }
+                    ],
+                    "thumbnail": null,
+                    "footer": null
+                },
+                "message": {
+                    "id": "260140763093008384"
+                }
+            }
+        ]
+    ]
+]
