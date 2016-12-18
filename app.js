@@ -104,7 +104,13 @@ const _saveChecklists = () => {
   );
   client.emit('debug', 'Saved checklists.json');
 };
-setInterval(_saveChecklists, 30000);
+setInterval(() => {
+  try {
+    _saveChecklists();
+  } catch (err) {
+    client.emit('error', 'Was unable to save the checklists');
+  }
+}, 30000);
 
 client.on('info', console.log);
 client.on('debug', console.log);
