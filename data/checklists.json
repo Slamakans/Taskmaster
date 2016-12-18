@@ -28,6 +28,39 @@
                     "id": "259390191481913345"
                 }
             }
+        ],
+        [
+            "259390501420007436",
+            {
+                "listID": "2",
+                "embed": {
+                    "title": "#2 Prototype",
+                    "color": 9301742,
+                    "author": null,
+                    "fields": [
+                        {
+                            "name": "**1** ❤ First boss",
+                            "value": "Till att börja med, står still och periodiskt skjuter sin 5-orb attack som skadar on impact. Vid sista biten av sitt HP går den in i 'spam' mode.",
+                            "inline": false
+                        },
+                        {
+                            "name": "**2** ❤ Player",
+                            "value": "Springa runt och hoppa. Ganska responsive air-control. Pew pew pew attack, skjuter mot musen.",
+                            "inline": false
+                        },
+                        {
+                            "name": "**3** ❤ Camera",
+                            "value": "Alien Swarm fast mer utzoomad. Spelaren och bossen ska alltid vara på skärm samtidigt, får leka lite med zoom, höjd o tilt.",
+                            "inline": false
+                        }
+                    ],
+                    "thumbnail": null,
+                    "footer": null
+                },
+                "message": {
+                    "id": "259390501420007436"
+                }
+            }
         ]
     ],
     [

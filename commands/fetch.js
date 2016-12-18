@@ -18,7 +18,10 @@ module.exports = (client, message, args) => new Promise(async (resolve, reject) 
       embed,
       message: { id: m.id },
     });
-    resolve();
+    message.channel.sendMessage('Aight')
+      .then(response => response.delete(2000))
+      .then(() => message.delete())
+      .then(resolve);
   } catch (err) {
     if (err.message.startsWith('Not found')) {
       reject('Couldn\'t find a message with that id.');
