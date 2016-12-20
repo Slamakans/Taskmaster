@@ -14,7 +14,7 @@ Use \`"\` for the title and text if you want multiple words.`
   if (!client.checklists.has(message.channel.id)) {
     client.checklists.set(message.channel.id, new Collection());
   }
-  const checklist = client.checklists.get(message.channel.id).find('listID', list);
+  const checklist = client.checklists.get(message.channel.id).find(c => Number(c.listID) === list);
   if (!checklist) { return reject('Create a checklist using `!create` first'); }
 
   let msg;

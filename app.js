@@ -35,7 +35,7 @@ client.on('message', async message => {
         .then(() =>
           client.emit('info', `${message.author.username} finished executing ${command} (${Date.now() - start} ms)`)
         )
-        .catch(e => message.channel.sendMessage(e.stack).then(m => m.delete(10000)).then(() => message.delete()));
+        .catch(e => message.channel.sendMessage(e.stack || e).then(m => m.delete(10000)).then(() => message.delete()));
     }
   } catch (err) {
     client.emit('error', err);
@@ -58,7 +58,7 @@ client.on('ready', () => {
   try {
     client.checklists = new Collection(
       require('./data/checklists.json')
-        .map(channel => [channel[0], new Collection([channel[1]])])
+        .map(channel => [channel[0], new Collection(channel[1])])
     );
     client.emit('info', 'Checklists loaded');
   } catch (err) {
@@ -100,7 +100,11 @@ const fs = require('fs');
 const _saveChecklists = () => {
   fs.writeFileSync(
     'data/checklists.json',
-    `${JSON.stringify([...client.checklists.map((e, k) => [k, ...e])], undefined, 4)}
+    `${JSON.stringify(
+      client.checklists.map((e, k) => [k, [...e]]),
+      undefined,
+      2
+    )}
 `
   );
   client.emit('debug', 'Saved checklists.json');
