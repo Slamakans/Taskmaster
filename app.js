@@ -73,9 +73,8 @@ client.on('ready', () => {
 client.on('disconnect', () => client.emit('info', 'Bot disconnected'));
 
 function processContent(content) {
-  // const lowercase = content.toLowerCase();
   const args = content.split(' ');
-  const command = args.shift().toLowerCase().replace(new RegExp(`^${PREFIX.toLowerCase()}`, 'i'), '');
+  const command = args.shift().toLowerCase().substr(PREFIX.length);
   const segments = [[]];
   args.forEach((e, i, a) => {
     if (segments[segments.length - 1].length === 2) segments.push([]);
