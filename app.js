@@ -75,21 +75,15 @@ client.on('disconnect', () => client.emit('info', 'Bot disconnected'));
 function processContent(content) {
   const args = content.split(' ');
   const command = args.shift().toLowerCase().substr(PREFIX.length);
-  const segments = [[]];
   args.forEach((e, i, a) => {
-    if (segments[segments.length - 1].length === 2) segments.push([]);
-    if (e.startsWith('"')) segments[segments.length - 1].push(i);
-    if (e.endsWith('"')) segments[segments.length - 1].push(i);
-    a[i] = e.replace(/(^"|"$)/g, '');
-  });
-  let offset = 0;
-  segments.forEach(segment => {
-    if (segment.length !== 2) return;
-    const start = segment[0];
-    const count = 1 + (segment[1] - start);
-    const removed = args.splice(start + offset, count);
-    args.splice(start + offset, 0, removed.join(' '));
-    offset -= count - 1;
+    if (e.startsWith('"')) {
+      for (let j = i; j < a.length; j++) {
+        if (a[j].endsWith('"')) {
+          const slice = a.slice(i, j + 1).join(' ').replace(/(^"|"$)/g, '');
+          args.splice(i, (j - i) + 1, slice);
+        }
+      }
+    }
   });
 
   return { command, args };
